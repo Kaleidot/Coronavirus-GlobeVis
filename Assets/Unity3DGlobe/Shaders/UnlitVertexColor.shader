@@ -5,7 +5,8 @@
 	}
 	SubShader
 	{
-		Tags { "RenderType"="Opaque" }
+
+		Tags {"RenderType"="Opaque" }
 		LOD 100
 
 		Pass

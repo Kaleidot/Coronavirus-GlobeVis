@@ -9,8 +9,15 @@ public class DataVisualizer : MonoBehaviour {
     public GameObject PointPrefab;
     public float ValueScaleMultiplier = 1;
     GameObject[] seriesObjects;
-    int currentSeries = 0;
-    public void CreateMeshes(SeriesData[] allSeries)
+    public GameObject currentGO;
+    //int currentSeries = 0;
+    int currentSeries;
+
+    public void RefreshSeriesObjects() {
+
+    }
+
+    public void CreateMeshes(SeriesData[] allSeries, int dateIndex, int colGap)
     {
         seriesObjects = new GameObject[allSeries.Length];
         GameObject p = Instantiate<GameObject>(PointPrefab);
@@ -21,57 +28,120 @@ public class DataVisualizer : MonoBehaviour {
         List<int> meshIndices = new List<int>(117000);
         List<Color> meshColors = new List<Color>(65000);
 
-        for (int i = 0; i < allSeries.Length; i++)
+
+        GameObject seriesObj = new GameObject(allSeries[dateIndex].Name);
+        seriesObj.transform.parent = Earth.transform;
+        seriesObjects[dateIndex] = seriesObj;
+        SeriesData seriesData = allSeries[dateIndex];
+        //Debug.Log(seriesData.Data.Length + "seriesData.Data.Length");
+        for (int j = 2; j < seriesData.Data.Length; j += 8)
         {
-            GameObject seriesObj = new GameObject(allSeries[i].Name);
-            seriesObj.transform.parent = Earth.transform;
-            seriesObjects[i] = seriesObj;
-            SeriesData seriesData = allSeries[i];
-            Debug.Log(seriesData.Data.Length + "seriesData.Data.Length");
-            for (int j = 2; j < seriesData.Data.Length; j+=8)
+            float lat = seriesData.Data[j];
+            float lng = seriesData.Data[j + 1];
+            float value = seriesData.Data[j + colGap];
+            //Debug.Log("value: " + value);
+            AppendPointVertices(p, verts, indices, lng, lat, value, meshVertices, meshIndices, meshColors);
+            if (meshVertices.Count + verts.Length > 65000)
             {
-                float lat = seriesData.Data[j];
-                float lng = seriesData.Data[j + 1];
-                float value = seriesData.Data[j + 4];
-                AppendPointVertices(p, verts, indices, lng, lat, value, meshVertices, meshIndices, meshColors);
-                if (meshVertices.Count + verts.Length > 65000)
-                {
-                    CreateObject(meshVertices, meshIndices, meshColors, seriesObj);
-                    meshVertices.Clear();
-                    meshIndices.Clear();
-                    meshColors.Clear();
-                }
+                CreateObject(meshVertices, meshIndices, meshColors, seriesObj);
+                meshVertices.Clear();
+                meshIndices.Clear();
+                meshColors.Clear();
             }
-            //for (int j = 0; j < seriesData.Data.Length; j += 3)
-            //{
-            //    float lat = seriesData.Data[j];
-            //    float lng = seriesData.Data[j + 1];
-            //    float value = seriesData.Data[j + 2];
-            //    AppendPointVertices(p, verts, indices, lng, lat, value, meshVertices, meshIndices, meshColors);
-            //    if (meshVertices.Count + verts.Length > 65000)
-            //    {
-            //        CreateObject(meshVertices, meshIndices, meshColors, seriesObj);
-            //        meshVertices.Clear();
-            //        meshIndices.Clear();
-            //        meshColors.Clear();
-            //    }
-            //}
-            CreateObject(meshVertices, meshIndices, meshColors, seriesObj);
-            meshVertices.Clear();
-            meshIndices.Clear();
-            meshColors.Clear();
-            seriesObjects[i].SetActive(false);
         }
+        //for (int j = 0; j < seriesData.Data.Length; j += 3)
+        //{
+        //    float lat = seriesData.Data[j];
+        //    float lng = seriesData.Data[j + 1];
+        //    float value = seriesData.Data[j + 2];
+        //    AppendPointVertices(p, verts, indices, lng, lat, value, meshVertices, meshIndices, meshColors);
+        //    if (meshVertices.Count + verts.Length > 65000)
+        //    {
+        //        CreateObject(meshVertices, meshIndices, meshColors, seriesObj);
+        //        meshVertices.Clear();
+        //        meshIndices.Clear();
+        //        meshColors.Clear();
+        //    }
+        //}
 
+        CreateObject(meshVertices, meshIndices, meshColors, seriesObj);
+        meshVertices.Clear();
+        meshIndices.Clear();
+        meshColors.Clear();
+        seriesObjects[dateIndex].SetActive(false);
 
+        currentSeries = dateIndex;
         seriesObjects[currentSeries].SetActive(true);
         Destroy(p);
     }
+
+    //public void CreateMeshes(SeriesData[] allSeries)
+    //{
+    //    seriesObjects = new GameObject[allSeries.Length];
+    //    GameObject p = Instantiate<GameObject>(PointPrefab);
+    //    Vector3[] verts = p.GetComponent<MeshFilter>().mesh.vertices;
+    //    int[] indices = p.GetComponent<MeshFilter>().mesh.triangles;
+
+    //    List<Vector3> meshVertices = new List<Vector3>(65000);
+    //    List<int> meshIndices = new List<int>(117000);
+    //    List<Color> meshColors = new List<Color>(65000);
+
+    //    for (int i = 0; i < allSeries.Length; i++)
+    //    {
+    //        GameObject seriesObj = new GameObject(allSeries[i].Name);
+    //        seriesObj.transform.parent = Earth.transform;
+    //        seriesObjects[i] = seriesObj;
+    //        SeriesData seriesData = allSeries[i];
+    //        //Debug.Log(seriesData.Data.Length + "seriesData.Data.Length");
+    //        for (int j = 2; j < seriesData.Data.Length; j+=8)
+    //        {
+    //            float lat = seriesData.Data[j];
+    //            float lng = seriesData.Data[j + 1];
+    //            float value = seriesData.Data[j + 4];
+    //            AppendPointVertices(p, verts, indices, lng, lat, value, meshVertices, meshIndices, meshColors);
+    //            if (meshVertices.Count + verts.Length > 65000)
+    //            {
+    //                CreateObject(meshVertices, meshIndices, meshColors, seriesObj);
+    //                meshVertices.Clear();
+    //                meshIndices.Clear();
+    //                meshColors.Clear();
+    //            }
+    //        }
+    //        //for (int j = 0; j < seriesData.Data.Length; j += 3)
+    //        //{
+    //        //    float lat = seriesData.Data[j];
+    //        //    float lng = seriesData.Data[j + 1];
+    //        //    float value = seriesData.Data[j + 2];
+    //        //    AppendPointVertices(p, verts, indices, lng, lat, value, meshVertices, meshIndices, meshColors);
+    //        //    if (meshVertices.Count + verts.Length > 65000)
+    //        //    {
+    //        //        CreateObject(meshVertices, meshIndices, meshColors, seriesObj);
+    //        //        meshVertices.Clear();
+    //        //        meshIndices.Clear();
+    //        //        meshColors.Clear();
+    //        //    }
+    //        //}
+    //        CreateObject(meshVertices, meshIndices, meshColors, seriesObj);
+    //        meshVertices.Clear();
+    //        meshIndices.Clear();
+    //        meshColors.Clear();
+    //        seriesObjects[i].SetActive(false);
+    //    }
+
+
+    //    seriesObjects[currentSeries].SetActive(true);
+    //    Destroy(p);
+    //}
     private void AppendPointVertices(GameObject p, Vector3[] verts, int[] indices, float lng,float lat,float value, List<Vector3> meshVertices,
     List<int> meshIndices,
     List<Color> meshColors)
     {
         Color valueColor = Colors.Evaluate(value);
+        
+        //valueColor.a = 0f;
+        //Debug.Log("valueColor: " + valueColor.ToString());
+        //Debug.Log("valueColor.a" + valueColor.a);
+
         Vector3 pos;
         pos.x = 0.5f * Mathf.Cos((lng) * Mathf.Deg2Rad) * Mathf.Cos(lat * Mathf.Deg2Rad);
         pos.y = 0.5f * Mathf.Sin(lat * Mathf.Deg2Rad);
@@ -99,6 +169,8 @@ public class DataVisualizer : MonoBehaviour {
         mesh.vertices = meshertices.ToArray();
         mesh.triangles = meshindecies.ToArray();
         mesh.colors = meshColors.ToArray();
+
+
         GameObject obj = new GameObject();
         obj.transform.parent = Earth.transform;
         obj.AddComponent<MeshFilter>().mesh = mesh;

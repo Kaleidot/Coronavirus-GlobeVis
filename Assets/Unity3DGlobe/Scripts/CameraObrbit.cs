@@ -22,12 +22,33 @@ public class CameraObrbit : MonoBehaviour {
     {
         if (Input.GetMouseButtonDown(0))
         {
-            down = true;
-            mouseOnDown.x = Input.mousePosition.x;
-            mouseOnDown.y = -Input.mousePosition.y;
+            // Debug the clicked object
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
 
-            targetOnDown.x = target.x;
-            targetOnDown.y = target.y;
+            if (Physics.Raycast(ray, out hit))
+            {
+                //Debug.Log(hit.transform.gameObject.name);
+                if (hit.transform.gameObject.name == "Earth")
+                {
+                    //Debug.Log("It's earth!");
+                    // Toggle mouse control
+                    down = true;
+                    mouseOnDown.x = Input.mousePosition.x;
+                    mouseOnDown.y = -Input.mousePosition.y;
+
+                    targetOnDown.x = target.x;
+                    targetOnDown.y = target.y;
+                }
+            }
+
+            //// Toggle mouse control
+            //down = true;
+            //mouseOnDown.x = Input.mousePosition.x;
+            //mouseOnDown.y = -Input.mousePosition.y;
+
+            //targetOnDown.x = target.x;
+            //targetOnDown.y = target.y;
         }
         else if(Input.GetMouseButtonUp(0))
         {
