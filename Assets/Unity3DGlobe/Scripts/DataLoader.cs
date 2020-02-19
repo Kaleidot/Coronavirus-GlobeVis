@@ -6,9 +6,10 @@ using System.Linq;
 
 public class DataLoader : MonoBehaviour {
 
-    public DataVisualizer DayVisualizer;
-    public DataVisualizer NewCaseVisualizer;
+    public DataVisualizer dayVisualizer;
+    public DataVisualizer newCaseVisualizer;
     public Dropdown dateDropDown;
+    public ButtonListContentManager buttonContentManager;
 
     private string[] dates;
     private Dictionary<string, int> hashedDates = new Dictionary<string, int>();
@@ -23,7 +24,7 @@ public class DataLoader : MonoBehaviour {
         string json = jsonData.text;
         //SeriesArray data = JsonUtility.FromJson<SeriesArray>(json);
         data = JsonUtility.FromJson<SeriesArray>(json);
-        DayVisualizer.CreateMeshes(data.AllData, 0, 4);
+        dayVisualizer.CreateMeshes(data.AllData, 0, 4);
 
         // Process data to get dates
         dates = json.Split('\n');
@@ -43,7 +44,10 @@ public class DataLoader : MonoBehaviour {
 
             // Feed the dates into a drop down list
             dateDropDown.options.Add(new Dropdown.OptionData(dateString));
-        }
+
+            // Create buttons for the dates
+            buttonContentManager.CreateButton(dateString);
+        } 
 
         //// Debug dictionary
         //foreach (KeyValuePair<string, int> pair in hashedDates)
@@ -75,8 +79,8 @@ public class DataLoader : MonoBehaviour {
                 GameObject.Destroy(child.gameObject);
             }
         }
-        DayVisualizer.CreateMeshes(data.AllData, value, 4);
-        NewCaseVisualizer.CreateMeshes(data.AllData, value, 5);
+        dayVisualizer.CreateMeshes(data.AllData, value, 4);
+        newCaseVisualizer.CreateMeshes(data.AllData, value, 5);
     }
 }
 
