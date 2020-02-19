@@ -3,13 +3,17 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 public class DataLoader : MonoBehaviour {
 
     public DataVisualizer dayVisualizer;
     public DataVisualizer newCaseVisualizer;
     public Dropdown dateDropDown;
-    public ButtonListContentManager buttonContentManager;
+    //public ButtonListContentManager buttonContentManager;
+    public GameObject buttonPrefab;
+    public GameObject parentToAttachButtonsTo;
+    public Text headDateText;
 
     private string[] dates;
     private Dictionary<string, int> hashedDates = new Dictionary<string, int>();
@@ -46,7 +50,7 @@ public class DataLoader : MonoBehaviour {
             dateDropDown.options.Add(new Dropdown.OptionData(dateString));
 
             // Create buttons for the dates
-            buttonContentManager.CreateButton(dateString);
+            CreateButton(dateString);
         } 
 
         //// Debug dictionary
@@ -66,6 +70,48 @@ public class DataLoader : MonoBehaviour {
         //    //Debug.Log("Added.");
         //}
 
+    }
+
+    void OnClick()
+    {
+        //Debug.Log("Clicked!");
+        GameObject currentSelectedGB = EventSystem.current.currentSelectedGameObject;
+        string tag = currentSelectedGB.tag;
+        if (tag == "Button")
+        {
+            string dateText = currentSelectedGB.transform.GetChild(0).GetComponent<Text>().text;
+
+            headDateText.text = dateText;
+
+            int value = FindDateIndex(dateText);
+            LoadNewData(value);
+        }
+    }
+
+    public void CreateButton(string buttonText)
+    {
+        // Instantiate button
+        GameObject button = (GameObject)Instantiate(buttonPrefab);
+
+        // Set button parent
+        button.transform.SetParent(parentToAttachButtonsTo.transform);
+
+        // Set what button does when clicked
+        button.GetComponent<Button>().onClick.AddListener(OnClick);
+
+        // Change button text
+        button.transform.GetChild(0).GetComponent<Text>().text = buttonText;
+    }
+
+    public int FindDateIndex(string dateString)
+    {
+        int dateIndex = 0;
+        if (hashedDates.ContainsKey(dateString))
+        {
+            dateIndex = hashedDates[dateString];
+            Debug.Log("dateIndex display: " + dateString + " : " + dateIndex);
+        }
+        return dateIndex;
     }
 
     public void LoadNewData(int value)

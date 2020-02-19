@@ -1953,7 +1953,10 @@ MonoBehaviour:
   dayVisualizer: {fileID: 239864872}
   newCaseVisualizer: {fileID: 98612972}
   dateDropDown: {fileID: 213617337}
-  buttonContentManager: {fileID: 1722610062}
+  buttonPrefab: {fileID: 63679116863269256, guid: 6297b31b3a860474b81fe329ca7f824a,
+    type: 3}
+  parentToAttachButtonsTo: {fileID: 1087160587}
+  headDateText: {fileID: 1282466978}
 --- !u!1 &963271105
 GameObject:
   m_ObjectHideFlags: 0
@@ -2745,7 +2748,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1/21/2020
+  m_Text: ' 1/21/2020'
 --- !u!222 &1282466979
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3491,7 +3494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1722610062
 MonoBehaviour:
   m_ObjectHideFlags: 0
