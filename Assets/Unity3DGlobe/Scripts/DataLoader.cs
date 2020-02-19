@@ -96,6 +96,8 @@ public class DataLoader : MonoBehaviour {
         // Set button parent
         button.transform.SetParent(parentToAttachButtonsTo.transform);
 
+        button.transform.localScale = Vector3.one;
+
         // Set what button does when clicked
         button.GetComponent<Button>().onClick.AddListener(OnClick);
 
@@ -109,7 +111,7 @@ public class DataLoader : MonoBehaviour {
         if (hashedDates.ContainsKey(dateString))
         {
             dateIndex = hashedDates[dateString];
-            Debug.Log("dateIndex display: " + dateString + " : " + dateIndex);
+            //Debug.Log("dateIndex display: " + dateString + " : " + dateIndex);
         }
         return dateIndex;
     }
