@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.EventSystems;
 
-public class DataLoader : MonoBehaviour {
+public class DataLoader : MonoBehaviour
+{
 
     public DataVisualizer dayVisualizer;
     public DataVisualizer newCaseVisualizer;
@@ -20,7 +21,8 @@ public class DataLoader : MonoBehaviour {
     private SeriesArray data;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         // Load json data file
         //TextAsset jsonData = Resources.Load<TextAsset>("population");
         //TextAsset jsonData = Resources.Load<TextAsset>("coronavirusConfirmed0210_3cols_v2");
@@ -35,7 +37,8 @@ public class DataLoader : MonoBehaviour {
         int hashIndex = -1;
         dateDropDown.options.Clear();
 
-        for (int i = 3; i < dates.Length - 1; i += 4) {
+        for (int i = 3; i < dates.Length - 1; i += 4)
+        {
 
             // Extract dates from the data source
             string[] dateStrings = dates[i].Split(':');
@@ -51,7 +54,7 @@ public class DataLoader : MonoBehaviour {
 
             // Create buttons for the dates
             CreateButton(dateString);
-        } 
+        }
 
         //// Debug dictionary
         //foreach (KeyValuePair<string, int> pair in hashedDates)
