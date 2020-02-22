@@ -292,7 +292,7 @@ MonoBehaviour:
   Earth: {fileID: 1097273624}
   PointPrefab: {fileID: 1000012603317774, guid: dff023814afa9c64e93e73923335bbcb,
     type: 3}
-  ValueScaleMultiplier: 0.1
+  ValueScaleMultiplier: 0.001
   currentGO: {fileID: 0}
 --- !u!4 &98612973
 Transform:
@@ -819,7 +819,7 @@ MonoBehaviour:
   Earth: {fileID: 1097273624}
   PointPrefab: {fileID: 1000012603317774, guid: dff023814afa9c64e93e73923335bbcb,
     type: 3}
-  ValueScaleMultiplier: 0.1
+  ValueScaleMultiplier: 0.001
   currentGO: {fileID: 0}
 --- !u!4 &239864873
 Transform:
@@ -2895,7 +2895,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 685830467}
   m_HandleRect: {fileID: 685830466}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
