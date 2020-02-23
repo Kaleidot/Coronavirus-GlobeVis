@@ -1,9 +1,9 @@
 ﻿<Properties StartupConfiguration="{72D5A3C9-5A86-D450-AA3A-9FD393771428}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Unity3DGlobe/Scripts/DataLoader.cs">
     <Files>
-      <File FileName="Assets/Unity3DGlobe/Scripts/DataLoader.cs" Line="59" Column="76" IsPinned="True" />
+      <File FileName="Assets/Unity3DGlobe/Scripts/DataLoader.cs" Line="12" Column="34" IsPinned="True" />
       <File FileName="Assets/Unity3DGlobe/Scripts/DataVisualizer.cs" Line="176" Column="52" />
-      <File FileName="Assets/Scripts/ButtonListContentManager.cs" Line="61" Column="42" />
+      <File FileName="Assets/Scripts/ButtonListContentManager.cs" Line="11" Column="30" />
       <File FileName="Assets/Scripts/TextController.cs" Line="14" Column="80" />
     </Files>
     <Pads>
