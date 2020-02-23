@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
-public class DataVisualizer : MonoBehaviour {
+public class DataVisualizer : MonoBehaviour
+{
     public Material PointMaterial;
     public Gradient Colors;
     public GameObject Earth;
@@ -13,33 +15,56 @@ public class DataVisualizer : MonoBehaviour {
     //int currentSeries = 0;
     int currentSeries;
 
-    public void RefreshSeriesObjects() {
+    // just for looking good
+    private GameObject points;
+
+    public void RefreshSeriesObjects()
+    {
 
     }
 
-    public void CreateMeshes(SeriesData[] allSeries, int dateIndex, int colGap)
+    public void CreateMeshes(SeriesData[] allSeries, int dateIndex, int colGap, string[] dataString)
     {
         seriesObjects = new GameObject[allSeries.Length];
-        GameObject p = Instantiate<GameObject>(PointPrefab);
-        Vector3[] verts = p.GetComponent<MeshFilter>().mesh.vertices;
-        int[] indices = p.GetComponent<MeshFilter>().mesh.triangles;
+
 
         List<Vector3> meshVertices = new List<Vector3>(65000);
         List<int> meshIndices = new List<int>(117000);
         List<Color> meshColors = new List<Color>(65000);
-
 
         GameObject seriesObj = new GameObject(allSeries[dateIndex].Name);
         seriesObj.transform.parent = Earth.transform;
         seriesObjects[dateIndex] = seriesObj;
         SeriesData seriesData = allSeries[dateIndex];
         //Debug.Log(seriesData.Data.Length + "seriesData.Data.Length");
+
+        if (name == "DataVisualizer")
+        {
+            points = new GameObject("pointCollection");
+            points.transform.parent = Earth.transform;
+        }
+
+
+        //Debug.Log(seriesData.Data[0].ToString());
         for (int j = 2; j < seriesData.Data.Length; j += 8)
         {
             float lat = seriesData.Data[j];
             float lng = seriesData.Data[j + 1];
             float value = seriesData.Data[j + colGap];
-            //Debug.Log("value: " + value);
+            //float value = seriesData.Data[j - 2 + colGap];
+
+
+            // create p for place holder and keep it if the total number point
+            GameObject p = Instantiate<GameObject>(PointPrefab);
+            Vector3[] verts = p.GetComponent<MeshFilter>().mesh.vertices;
+            int[] indices = p.GetComponent<MeshFilter>().mesh.triangles;
+            p.GetComponent<MeshRenderer>().enabled = false;
+
+            p.GetComponent<DataPoint>().SetCityName(dataString[j - 2]);
+            p.GetComponent<DataPoint>().SetCountryName(dataString[j - 1]);
+            p.GetComponent<DataPoint>().SetNewNum(Convert.ToInt32(Convert.ToSingle(dataString[j + 3].Replace("\"", ""))));
+            p.GetComponent<DataPoint>().SetTotalNum(Convert.ToInt32(Convert.ToSingle(dataString[j + 2].Replace("\"", ""))));
+
             AppendPointVertices(p, verts, indices, lng, lat, value, meshVertices, meshIndices, meshColors);
             if (meshVertices.Count + verts.Length > 65000)
             {
@@ -48,7 +73,12 @@ public class DataVisualizer : MonoBehaviour {
                 meshIndices.Clear();
                 meshColors.Clear();
             }
+
+            // destroy p if not for DoD
+            if (name != "DataVisualizer")
+                Destroy(p);
         }
+
         //for (int j = 0; j < seriesData.Data.Length; j += 3)
         //{
         //    float lat = seriesData.Data[j];
@@ -72,7 +102,9 @@ public class DataVisualizer : MonoBehaviour {
 
         currentSeries = dateIndex;
         seriesObjects[currentSeries].SetActive(true);
-        Destroy(p);
+        //////////////////////////
+        //Destroy(p);
+        /////////////////////////
     }
 
     //public void CreateMeshes(SeriesData[] allSeries)
@@ -132,12 +164,12 @@ public class DataVisualizer : MonoBehaviour {
     //    seriesObjects[currentSeries].SetActive(true);
     //    Destroy(p);
     //}
-    private void AppendPointVertices(GameObject p, Vector3[] verts, int[] indices, float lng,float lat,float value, List<Vector3> meshVertices,
+    private void AppendPointVertices(GameObject p, Vector3[] verts, int[] indices, float lng, float lat, float value, List<Vector3> meshVertices,
     List<int> meshIndices,
     List<Color> meshColors)
     {
         Color valueColor = Colors.Evaluate(value);
-        
+
         //valueColor.a = 0f;
         //Debug.Log("valueColor: " + valueColor.ToString());
         //Debug.Log("valueColor.a" + valueColor.a);
@@ -162,6 +194,10 @@ public class DataVisualizer : MonoBehaviour {
         {
             meshIndices.Add(prevVertCount + indices[k]);
         }
+
+        // attach to collection if for DoD
+        if (name == "DataVisualizer")
+            p.transform.parent = points.transform;
     }
     private void CreateObject(List<Vector3> meshertices, List<int> meshindecies, List<Color> meshColors, GameObject seriesObj)
     {

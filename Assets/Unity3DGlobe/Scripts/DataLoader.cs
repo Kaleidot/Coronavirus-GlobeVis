@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.EventSystems;
 
-public class DataLoader : MonoBehaviour {
+public class DataLoader : MonoBehaviour
+{
 
     public DataVisualizer dayVisualizer;
     public DataVisualizer newCaseVisualizer;
@@ -14,28 +15,37 @@ public class DataLoader : MonoBehaviour {
     public GameObject buttonPrefab;
     public GameObject parentToAttachButtonsTo;
     public Text headDateText;
+    public GameObject detailsOnDemandPanel;
 
     private string[] dates;
     private Dictionary<string, int> hashedDates = new Dictionary<string, int>();
     private SeriesArray data;
+    private bool isDetailsOnDemandTriggered = false;
+
+    // string array to store data     
+    private Dictionary<string, string[]> hashedData = new Dictionary<string, string[]>();
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         // Load json data file
         //TextAsset jsonData = Resources.Load<TextAsset>("population");
         //TextAsset jsonData = Resources.Load<TextAsset>("coronavirusConfirmed0210_3cols_v2");
         TextAsset jsonData = Resources.Load<TextAsset>("CoronavirusData0210_all");
         string json = jsonData.text;
         //SeriesArray data = JsonUtility.FromJson<SeriesArray>(json);
-        data = JsonUtility.FromJson<SeriesArray>(json);
-        dayVisualizer.CreateMeshes(data.AllData, 0, 4);
+
 
         // Process data to get dates
         dates = json.Split('\n');
         int hashIndex = -1;
         dateDropDown.options.Clear();
 
-        for (int i = 3; i < dates.Length - 1; i += 4) {
+        data = JsonUtility.FromJson<SeriesArray>(json);
+        dayVisualizer.CreateMeshes(data.AllData, 0, 4, dates[4].Split(':')[1].Replace("[", "").Replace("]", "").Trim().Split(','));
+
+        for (int i = 3; i < dates.Length - 1; i += 4)
+        {
 
             // Extract dates from the data source
             string[] dateStrings = dates[i].Split(':');
@@ -51,7 +61,10 @@ public class DataLoader : MonoBehaviour {
 
             // Create buttons for the dates
             CreateButton(dateString);
-        } 
+
+            // Extract data from the data source
+            hashedData.Add(dateString, dates[i + 1].Split(':')[1].Replace("[", "").Replace("]", "").Trim().Split(','));
+        }
 
         //// Debug dictionary
         //foreach (KeyValuePair<string, int> pair in hashedDates)
@@ -72,6 +85,56 @@ public class DataLoader : MonoBehaviour {
 
     }
 
+    /// ////////////////////////////////
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform.name == "Point(Clone)")
+                {
+                    // TO DO UI
+                    Debug.Log("Country: " + hit.transform.GetComponent<DataPoint>().GetCountryName().Replace("\"", "").Replace("\"", "") + "; City: " + hit.transform.GetComponent<DataPoint>().GetCityName() + "; Total Number: " +
+                        hit.transform.GetComponent<DataPoint>().GetTotalNum() + "; New Number: " + hit.transform.GetComponent<DataPoint>().GetNewNum());
+
+                    string details = "Country: " + hit.transform.GetComponent<DataPoint>().GetCountryName().Replace("\"", "").Replace("\"", "") + "\n" +
+                                    "Province: " + hit.transform.GetComponent<DataPoint>().GetCityName().Replace("\"", "").Replace("\"", "") + "\n" +
+                                    "Total number of confirmed cases: " + hit.transform.GetComponent<DataPoint>().GetTotalNum() + "\n" +
+                                    "Number of new cases: " + hit.transform.GetComponent<DataPoint>().GetNewNum() + "\n";
+
+                    //hit.transform.GetChild(0).position = Input.mousePosition;
+                    //hit.transform.GetChild(0).rotation = Quaternion.Euler(Vector3.zero);
+                    //hit.transform.GetChild(0).GetChild(0).gameObject.AddComponent<Canvas>();
+                    //Canvas myCanvas = hit.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Canvas>();
+                    //myCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                    //myCanvas.tag = "DetailsOnDemand";
+
+                    GameObject myCanvas = GameObject.Find("Canvas");
+                    GameObject panel= (GameObject)Instantiate(detailsOnDemandPanel);
+
+                    panel.transform.SetParent(myCanvas.transform);
+                    //panel.transform.localPosition = Input.mousePosition;
+                    panel.transform.position = Input.mousePosition;
+                    panel.GetComponentInChildren<Text>().text = details;
+                    isDetailsOnDemandTriggered = true;
+                }
+                else
+                    isDetailsOnDemandTriggered = false;
+            }
+        }
+
+        if (!isDetailsOnDemandTriggered)
+        {
+            //GameObject.FindWithTag("DetailsOnDemand").SetActive(false);
+            Destroy(GameObject.FindWithTag("DetailsOnDemand"));
+        }
+    }
+    /// /////////////////////////////
+
     void OnClick()
     {
         //Debug.Log("Clicked!");
@@ -84,7 +147,8 @@ public class DataLoader : MonoBehaviour {
             headDateText.text = dateText;
 
             int value = FindDateIndex(dateText);
-            LoadNewData(value);
+            string[] dataString = FindDataString(dateText);
+            LoadNewData(value, dataString);
         }
     }
 
@@ -116,7 +180,15 @@ public class DataLoader : MonoBehaviour {
         return dateIndex;
     }
 
-    public void LoadNewData(int value)
+    public string[] FindDataString(string dateString)
+    {
+        string[] dataString = new string[100];
+        if (hashedDates.ContainsKey(dateString))
+            dataString = hashedData[dateString];
+        return dataString;
+    }
+
+    public void LoadNewData(int value, string[] dataString)
     {
         Transform Earth = GameObject.Find("Earth").transform;
         //remove existing vis
@@ -127,8 +199,8 @@ public class DataLoader : MonoBehaviour {
                 GameObject.Destroy(child.gameObject);
             }
         }
-        dayVisualizer.CreateMeshes(data.AllData, value, 4);
-        newCaseVisualizer.CreateMeshes(data.AllData, value, 5);
+        dayVisualizer.CreateMeshes(data.AllData, value, 4, dataString);
+        newCaseVisualizer.CreateMeshes(data.AllData, value, 5, dataString);
     }
 }
 

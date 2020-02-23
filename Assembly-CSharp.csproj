@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\ButtonListContentManager.cs" />
+    <Compile Include="Assets\Scripts\DataPoint.cs" />
     <Compile Include="Assets\Scripts\TextController.cs" />
     <Compile Include="Assets\Unity3DGlobe\Scripts\CameraObrbit.cs" />
     <Compile Include="Assets\Unity3DGlobe\Scripts\DataLoader.cs" />
