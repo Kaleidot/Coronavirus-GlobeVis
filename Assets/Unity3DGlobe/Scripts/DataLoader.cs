@@ -31,7 +31,8 @@ public class DataLoader : MonoBehaviour
         // Load json data file
         //TextAsset jsonData = Resources.Load<TextAsset>("population");
         //TextAsset jsonData = Resources.Load<TextAsset>("coronavirusConfirmed0210_3cols_v2");
-        TextAsset jsonData = Resources.Load<TextAsset>("CoronavirusData0210_all");
+        TextAsset jsonData = Resources.Load<TextAsset>("CoronavirusData0222_all");
+        //TextAsset jsonData = Resources.Load<TextAsset>("CoronavirusData0210_all");
         string json = jsonData.text;
         //SeriesArray data = JsonUtility.FromJson<SeriesArray>(json);
 
@@ -50,14 +51,14 @@ public class DataLoader : MonoBehaviour
             // Extract dates from the data source
             string[] dateStrings = dates[i].Split(':');
             string dateString = dateStrings[1].Replace("\"", "").Replace(",", "");
-            //Debug.Log(dateString);
+            Debug.Log(dateString);
 
             // Index the dates and store them in a dictionary
             hashIndex++;
             hashedDates.Add(dateString, hashIndex);
 
             // Feed the dates into a drop down list
-            dateDropDown.options.Add(new Dropdown.OptionData(dateString));
+            //dateDropDown.options.Add(new Dropdown.OptionData(dateString));
 
             // Create buttons for the dates
             CreateButton(dateString);
@@ -97,10 +98,10 @@ public class DataLoader : MonoBehaviour
             {
                 if (hit.transform.name == "Point(Clone)")
                 {
-                    // TO DO UI
-                    Debug.Log("Country: " + hit.transform.GetComponent<DataPoint>().GetCountryName().Replace("\"", "").Replace("\"", "") + "; City: " + hit.transform.GetComponent<DataPoint>().GetCityName() + "; Total Number: " +
-                        hit.transform.GetComponent<DataPoint>().GetTotalNum() + "; New Number: " + hit.transform.GetComponent<DataPoint>().GetNewNum());
+                    //Debug.Log("Country: " + hit.transform.GetComponent<DataPoint>().GetCountryName().Replace("\"", "").Replace("\"", "") + "; City: " + hit.transform.GetComponent<DataPoint>().GetCityName() + "; Total Number: " +
+                    //    hit.transform.GetComponent<DataPoint>().GetTotalNum() + "; New Number: " + hit.transform.GetComponent<DataPoint>().GetNewNum());
 
+                    // Details on Demand
                     string details = "Country: " + hit.transform.GetComponent<DataPoint>().GetCountryName().Replace("\"", "").Replace("\"", "") + "\n" +
                                     "Province: " + hit.transform.GetComponent<DataPoint>().GetCityName().Replace("\"", "").Replace("\"", "") + "\n" +
                                     "Total number of confirmed cases: " + hit.transform.GetComponent<DataPoint>().GetTotalNum() + "\n" +
