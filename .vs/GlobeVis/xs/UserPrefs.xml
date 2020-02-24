@@ -1,11 +1,12 @@
 ﻿<Properties StartupConfiguration="{72D5A3C9-5A86-D450-AA3A-9FD393771428}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Unity3DGlobe/Scripts/DataLoader.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Unity3DGlobe/Resources/CoronavirusData0210_all.json">
     <Files>
-      <File FileName="Assets/Unity3DGlobe/Scripts/DataLoader.cs" Line="152" Column="27" IsPinned="True" />
+      <File FileName="Assets/Unity3DGlobe/Scripts/DataLoader.cs" Line="82" Column="45" IsPinned="True" />
       <File FileName="Assets/Scripts/DataPoint.cs" />
-      <File FileName="Assets/Unity3DGlobe/Scripts/DataVisualizer.cs" Line="53" Column="53" />
+      <File FileName="Assets/Unity3DGlobe/Scripts/DataVisualizer.cs" Line="65" Column="1" />
       <File FileName="Assets/Scripts/ButtonListContentManager.cs" />
       <File FileName="Assets/Scripts/TextController.cs" />
+      <File FileName="Assets/Unity3DGlobe/Resources/CoronavirusData0210_all.json" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -23,13 +24,18 @@
           </Node>
         </State>
       </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="34b96ee4-423f-4837-936c-31063cf15085" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="d6891e4b-c83a-4a5b-b746-7d0a147ef1eb" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/xiaoyunhu/Documents/IT/Unity/GlobeVis/Assets/Unity3DGlobe/Scripts/DataLoader.cs" relfile="Assets/Unity3DGlobe/Scripts/DataLoader.cs" line="104" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>
