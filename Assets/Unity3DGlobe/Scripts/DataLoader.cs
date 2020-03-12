@@ -40,7 +40,7 @@ public class DataLoader : MonoBehaviour
         // Load json data file
         //TextAsset jsonData = Resources.Load<TextAsset>("population");
         //TextAsset jsonData = Resources.Load<TextAsset>("coronavirusConfirmed0210_3cols_v2");
-        TextAsset jsonData = Resources.Load<TextAsset>("CoronavirusData0222_all");
+        TextAsset jsonData = Resources.Load<TextAsset>("CoronavirusData0311_all");
         //TextAsset jsonData = Resources.Load<TextAsset>("CoronavirusData0210_all");
         string json = jsonData.text;
         //SeriesArray data = JsonUtility.FromJson<SeriesArray>(json);
